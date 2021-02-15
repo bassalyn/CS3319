@@ -1,0 +1,37 @@
+USE 250779140assign2db;
+
+SELECT * FROM doctor;
+SELECT * FROM seeing;
+
+
+DELETE FROM doctor WHERE licenseDate < '1965-01-01';
+SHOW WARNINGS;
+-- error occurs from trying to delete doctors who are head of hospital 
+-- they are ON DELETE RESTRICT so returns an error for this querry
+
+SELECT * FROM doctor;
+SELECT * FROM seeing;
+
+CREATE VIEW view1 AS SELECT patient.fName, patient.lName, doctor.lName AS "doctorlname", hospital.hospitalName FROM patient, doctor, hospital, seeing WHERE
+patient.OHIPnumber = seeing.OHIPnumber AND
+seeing.licenseNumber = doctor.licenseNumber AND
+doctor.licenseNumber = hospital.headIDnumber AND
+hospital.startDate > '1995-12-31';
+
+SELECT * FROM view1;
+
+SELECT * FROM doctor;
+SELECT * FROM seeing;
+
+DELETE FROM doctor WHERE lName="Clooney";
+
+SELECT * FROM doctor;
+SELECT * FROM seeing;
+
+
+DELETE FROM doctor WHERE specialty="Surgeon";
+-- did not delete because as a surgeon is a head of one of the hospitals 
+-- hence ON DELETE RESTRICT returns an error for this query 
+
+SELECT * FROM doctor;
+SELECT * FROM seeing;

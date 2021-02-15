@@ -1,0 +1,59 @@
+SHOW DATABASES;
+DROP DATABASE IF EXISTS 250779140assign2db;
+
+CREATE DATABASE 250779140assign2db;
+USE 250779140assign2db;
+
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON 250779140assign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+
+SHOW TABLES;
+
+
+CREATE TABLE patient (
+		OHIPnumber int(9) not null,
+		fName varchar(20) not null,
+		lName varchar(20) not null,
+		primary key(OHIPnumber)
+);
+
+CREATE TABLE hospital (
+		hospitalName varchar(20) not null,
+		city varchar(20) not null,
+		province varchar(2) not null,
+		hospitalCode varchar(3) not null,
+		numBeds int,
+		headIDnumber varchar(4),
+		startDate date,
+		primary key(hospitalCode)
+
+);
+
+CREATE TABLE doctor (
+		licenseNumber varchar(4) not null,
+		fName varchar(20) not null,
+		lName varchar(20) not null,
+		specialty varchar(30) not null,
+		licenseDate date,
+		worksAt varchar(3),
+		primary key(licenseNumber),
+		foreign key(worksAt) references hospital(hospitalCode)
+
+);
+
+ALTER TABLE hospital ADD FOREIGN KEY (headIDnumber) REFERENCES doctor(licenseNumber) ON DELETE RESTRICT;
+
+CREATE TABLE seeing (
+		OHIPnumber int(9) not null,
+		licenseNumber varchar(4) not null,
+		primary key(OHIPnumber, licenseNumber),
+		foreign key(OHIPnumber) references patient(OHIPnumber),
+		foreign key(licenseNumber) references doctor(licenseNumber)
+		ON DELETE CASCADE
+);
+
+
+SHOW TABLES;
